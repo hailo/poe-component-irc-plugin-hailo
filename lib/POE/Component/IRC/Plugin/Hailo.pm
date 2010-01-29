@@ -41,7 +41,7 @@ sub PCI_register {
     $self->{irc} = $irc;
     POE::Session->create(
         object_states => [
-            $self => [qw(_start hailo_replied _msg_handler)],
+            $self => [qw(_start hailo_learn_replied _msg_handler)],
         ],
     );
 
@@ -67,8 +67,8 @@ sub _start {
     return;
 }
 
-sub hailo_replied {
-    my ($self, $args, $context) = @_[OBJECT, ARG0];
+sub hailo_learn_replied {
+    my ($self, $args, $context) = @_[OBJECT, ARG0, ARG1];
     my $reply = $self->_normalize_hailo(shift @$args);
     
     $self->{irc}->yield($self->{Method} => $context->{_target}, $reply);
