@@ -3,7 +3,6 @@ package POE::Component::IRC::Plugin::Hailo;
 use strict;
 use warnings;
 use Carp;
-use Encode qw(decode);
 use POE;
 use POE::Component::Hailo;
 use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
@@ -79,7 +78,7 @@ sub _sig_DIE {
 
 sub hailo_learn_replied {
     my ($self, $args, $context) = @_[OBJECT, ARG0, ARG1];
-    my $reply = $self->_normalize_hailo(shift @$args);
+    my $reply = shift @$args;
     
     $self->{irc}->yield($self->{Method} => $context->{_target}, $reply);
     return;
@@ -132,13 +131,6 @@ sub _msg_handler {
     );
 
     return;
-}
-
-sub _normalize_hailo {
-    my ($self, $line) = @_;
-
-    $line = decode('utf8', $line);
-    return $line;
 }
 
 sub _normalize_irc {
