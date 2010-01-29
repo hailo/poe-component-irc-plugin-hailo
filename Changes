@@ -1,4 +1,4 @@
-0.02
+0.02 Fri Jan 29 02:43:28 GMT 2010
     - Remove call to decode(). It's not needed, so we were double-encoding
 
 0.01 Fri Jan 29 00:47:53 GMT 2010
