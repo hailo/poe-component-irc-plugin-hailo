@@ -316,4 +316,8 @@ down the old brain if it was instantiated by the plugin itself.
 
 Hinrik E<Ouml>rn SigurE<eth>sson, hinrik.sig@gmail.com
 
+This distribution is based on
+L<POE::Component::IRC::Plugin::MegaHAL|POE::Component::IRC::Plugin::MegaHAL>
+by the same author.
+
 =cut

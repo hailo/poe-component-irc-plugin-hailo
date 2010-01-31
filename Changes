@@ -1,3 +1,6 @@
+0.03
+    - Just some Pod fixes
+
 0.02 Fri Jan 29 02:43:28 GMT 2010
     - Remove call to decode(). It's not needed, so we were double-encoding
 
