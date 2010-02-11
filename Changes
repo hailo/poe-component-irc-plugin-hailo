@@ -1,3 +1,6 @@
+0.05
+    - Forgot to apply the aforementioned fix to irchailo-seed too
+
 0.04 Thu Feb 11 20:55:19 GMT 2010
     - When we're addressed, trim some whitespace after the nickname
 
