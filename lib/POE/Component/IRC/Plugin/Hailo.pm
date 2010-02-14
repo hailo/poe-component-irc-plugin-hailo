@@ -231,6 +231,9 @@ access to a L<Hailo|Hailo> conversation simulator.
  $irc->plugin_add('Hailo', POE::Component::IRC::Plugin::Hailo->new(
      Own_channel    => '#bot_chan',
      Ignore_regexes => [ qr{^\s*\w+://\S+\s*$} ], # ignore URL-only lines
+     Hailo_args => {
+         brain_resource => 'brain.sqlite',
+     },
  ));
  
  $irc->yield('connect');
@@ -272,8 +275,7 @@ lying around. Useful if you want to use it with multiple IRC components.
 If this argument is not provided, the plugin will construct its own object.
 
 B<'Hailo_args'>, a hash reference containing arguments to pass to the
-constructor of a new L<POE::Component::Hailo|POE::Component::Hailo>
-object.
+constructor of a new L<Hailo|Hailo> object.
 
 B<'Own_channel'>, a channel where it will reply to all messages. The plugin
 will take care of joining the channel. It will part from it when the plugin
