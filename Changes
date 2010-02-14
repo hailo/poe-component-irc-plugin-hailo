@@ -1,3 +1,7 @@
+0.06
+    - Tell the user when we don't know enough to generate a reply
+    - Use Hailo_args in SYNOPSIS example so that it works out of the box
+
 0.05 Thu Feb 11 21:06:49 GMT 2010
     - Forgot to apply the aforementioned fix to irchailo-seed too
 
