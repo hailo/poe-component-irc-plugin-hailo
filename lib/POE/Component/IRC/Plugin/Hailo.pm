@@ -79,6 +79,7 @@ sub _sig_DIE {
 sub hailo_learn_replied {
     my ($self, $args, $context) = @_[OBJECT, ARG0, ARG1];
     my $reply = shift @$args;
+    $reply = "I don't know enough to answer you yet." if !defined $reply;
     
     $self->{irc}->yield($self->{Method} => $context->{_target}, $reply);
     return;
