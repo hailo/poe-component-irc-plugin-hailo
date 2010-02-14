@@ -25,3 +25,5 @@ verbose  = 3
 
 [-ErrorHandling::RequireCarping]
 [-ErrorHandling::RequireCheckingReturnValueOfEval]
+
+[-InputOutput::ProhibitExplicitStdin]
