@@ -1,4 +1,4 @@
-0.06
+0.06 Sun Feb 14 19:03:23 GMT 2010
     - Tell the user when we don't know enough to generate a reply
     - Use Hailo_args in SYNOPSIS example so that it works out of the box
     - Don't ignore abusers, just don't reply to them
