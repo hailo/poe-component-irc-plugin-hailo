@@ -25,6 +25,9 @@ SYNOPSIS
      $irc->plugin_add('Hailo', POE::Component::IRC::Plugin::Hailo->new(
          Own_channel    => '#bot_chan',
          Ignore_regexes => [ qr{^\s*\w+://\S+\s*$} ], # ignore URL-only lines
+         Hailo_args => {
+             brain_resource => 'brain.sqlite',
+         },
      ));
  
      $irc->yield('connect');
@@ -37,10 +40,10 @@ DESCRIPTION
     situations, see "new"). An example:
 
      --> hailo_bot joins #channel
-     <Someone> oh hi
+     <Someone> oh hi there
      <Other> hello there
-     <Someone> hailo_bot: hi there
-     <hailo_bot> oh hi
+     <Someone> hailo_bot: hi
+     <hailo_bot> oh hi there
 
     All NOTICEs are ignored, so if your other bots only issue NOTICEs like
     they should, they will be ignored automatically.
@@ -61,7 +64,7 @@ METHODS
     its own object.
 
     'Hailo_args', a hash reference containing arguments to pass to the
-    constructor of a new POE::Component::Hailo object.
+    constructor of a new Hailo object.
 
     'Own_channel', a channel where it will reply to all messages. The plugin
     will take care of joining the channel. It will part from it when the
@@ -69,8 +72,8 @@ METHODS
 
     'Abuse_interval', default is 60 (seconds), which means that user X in
     channel Y has to wait that long before addressing the bot in the same
-    channel if he doesn't want to be ignored. Setting this to 0 effectively
-    turns off abuse protection.
+    channel if he wants to get a reply. Setting this to 0 effectively turns
+    off abuse protection.
 
     'Talkative', when set to a true value, the bot will respond whenever
     someone mentions its name (in a PRIVMSG or CTCP ACTION (/me)). If false,
@@ -100,4 +103,7 @@ METHODS
 
 AUTHOR
     Hinrik Örn Sigurðsson, hinrik.sig@gmail.com
+
+    This distribution is based on POE::Component::IRC::Plugin::MegaHAL by
+    the same author.
 

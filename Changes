@@ -2,6 +2,7 @@
     - Read IRC lines as :bytes by default in irchailo-seed. This
       avoids issues where PERL_UNICODE or the -C option is set to
       something which tells perl to read STDIN in UTF-8 by default.
+    - Various Pod fixes
 
 0.06 Sun Feb 14 19:03:23 GMT 2010
     - Tell the user when we don't know enough to generate a reply
