@@ -8,7 +8,7 @@ use POE::Component::Hailo;
 use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
 use POE::Component::IRC::Plugin qw(PCI_EAT_NONE);
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 sub new {
     my ($package, %args) = @_;
