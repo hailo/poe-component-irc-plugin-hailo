@@ -3,7 +3,7 @@ package POE::Component::IRC::Plugin::Hailo;
 use strict;
 use warnings;
 use Carp;
-use Encode 'encode_utf8';
+use Encode qw(encode_utf8 is_utf8);
 use POE;
 use POE::Component::Hailo;
 use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
@@ -118,7 +118,7 @@ sub _msg_handler {
 
     # should we reply?
     my $event = 'learn';
-    if ($self->{Own_channel} && (l_irc($chan) eq l_irc($self->{Own_channel}))
+    if ($self->{Own_channel} && $self->_is_own_channel($chan)
         || $type eq 'public' && $what =~ s/^\s*\Q$nick\E[:,;.!?~]?\s//i
         || $self->{Talkative} && $what =~ /\Q$nick/i)
     {
@@ -142,6 +142,16 @@ sub _msg_handler {
         {_target => $chan },
     );
 
+    return;
+}
+
+sub _is_own_channel {
+    my $self = shift;
+    my $chan = l_irc(shift);
+    my $own  = l_irc($self->{Own_channel});
+
+    $chan = irc_to_utf8($chan) if is_utf8($own);
+    return 1 if $chan eq $own;
     return;
 }
 
