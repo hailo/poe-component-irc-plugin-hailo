@@ -1,4 +1,4 @@
-0.09
+0.09 Sun Mar 14 07:39:29 GMT 2010
     - Encode our output before sending it. This avoids double encoding of
       non-ASCII channel names.
 
