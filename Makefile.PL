@@ -2,6 +2,10 @@ use strict;
 use warnings;
 use inc::Module::Install;
 
+if ($inc::Module::Install::VERSION lt '0.94') {
+    die 'Module::Install is too old';
+}
+
 my $dist = 'POE-Component-IRC-Plugin-Hailo';
 name           ($dist);
 author         ('Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>');
@@ -25,6 +29,5 @@ author_requires('Perl::Critic'        => '1.098');
 author_requires('Test::Perl::Critic'  => '0');
 author_requires('Test::Pod'           => '1.41');
 author_requires('Test::Pod::Coverage' => '1.08');
-author_tests   ('xt');
 
 WriteAll();
