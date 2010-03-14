@@ -252,8 +252,8 @@ access to a L<Hailo|Hailo> conversation simulator.
  $irc->plugin_add('Connector', POE::Component::IRC::Plugin::Connector->new());
  $irc->plugin_add('Hailo', POE::Component::IRC::Plugin::Hailo->new(
      Own_channel    => '#bot_chan',
-     Ignore_regexes => [ qr{^\s*\w+://\S+\s*$} ], # ignore URL-only lines
-     Hailo_args => {
+     Ignore_regexes => [ qr{\w+://\w} ], # ignore lines containing URLs
+     Hailo_args     => {
          brain_resource => 'brain.sqlite',
      },
  ));
