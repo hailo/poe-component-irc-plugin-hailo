@@ -3,6 +3,7 @@ package POE::Component::IRC::Plugin::Hailo;
 use strict;
 use warnings;
 use Carp;
+use Encode 'encode_utf8';
 use POE;
 use POE::Component::Hailo;
 use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
@@ -81,7 +82,8 @@ sub hailo_learn_replied {
     my $reply = shift @$args;
     $reply = "I don't know enough to answer you yet." if !defined $reply;
     
-    $self->{irc}->yield($self->{Method} => $context->{_target}, $reply);
+    my $bytes = encode_utf8($reply);
+    $self->{irc}->yield($self->{Method} => $context->{_target}, $bytes);
     return;
 }
 
