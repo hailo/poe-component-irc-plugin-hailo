@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use Encode qw(encode_utf8 is_utf8);
+use List::Util qw(first);
 use POE;
 use POE::Component::Hailo;
 use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
@@ -87,6 +88,20 @@ sub hailo_learn_replied {
     return;
 }
 
+sub _ignoring_channel {
+    my ($self, $chan) = @_;
+
+    if ($self->{Channels}) {
+        unless ($self->{Own_channel} && $self->_is_own_channel($chan)) {
+            return if !first {
+                $chan = irc_to_utf8($chan) if is_utf8($_);
+                $_ == $chan
+            } @{ $self->{Channels} };
+        }
+    }
+    return;
+}
+
 sub _ignoring_user {
     my ($self, $user) = @_;
     
@@ -113,6 +128,7 @@ sub _msg_handler {
     my ($self, $kernel, $type, $user, $chan, $what) = @_[OBJECT, KERNEL, ARG0..$#_];
     my $nick = $self->{irc}->nick_name();
 
+    return if $self->_ignoring_channel($chan);
     return if $self->_ignoring_user($user);
     $what = _normalize_irc($what);
 
@@ -298,6 +314,10 @@ If this argument is not provided, the plugin will construct its own object.
 
 B<'Hailo_args'>, a hash reference containing arguments to pass to the
 constructor of a new L<Hailo|Hailo> object.
+
+B<'Channels'>, an array reference of channel names. If this is provided, the
+bot will only listen/respond the specified channels, rather than all
+channels (can be overridden with B<'Own_channel'>).
 
 B<'Own_channel'>, a channel where it will reply to all messages. The plugin
 will take care of joining the channel. It will part from it when the plugin
