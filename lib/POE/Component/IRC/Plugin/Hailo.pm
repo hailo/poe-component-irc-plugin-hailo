@@ -1,7 +1,7 @@
 package POE::Component::IRC::Plugin::Hailo;
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 use Carp;
 use Encode qw(encode_utf8 is_utf8);
 use List::Util qw(first);
