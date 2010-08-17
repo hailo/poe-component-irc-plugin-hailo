@@ -1,0 +1,127 @@
+=encoding utf8
+
+=head1 NAME
+
+POE::Component::IRC::Plugin::Hailo - A PoCo-IRC plugin which provides access to a L<Hailo|Hailo> conversation simulator.
+
+=head1 SYNOPSIS
+
+ #!/usr/bin/env perl
+ 
+ use strict;
+ use warnings;
+ use POE;
+ use POE::Component::IRC::Plugin::AutoJoin;
+ use POE::Component::IRC::Plugin::Connector;
+ use POE::Component::IRC::Plugin::Hailo;
+ use POE::Component::IRC::State;
+ 
+ my $irc = POE::Component::IRC::State->spawn(
+     nick   => 'Brainy',
+     server => 'irc.freenode.net',
+ );
+ 
+ my @channels = ('#public_chan', '#bot_chan');
+ 
+ $irc->plugin_add('AutoJoin', POE::Component::IRC::Plugin::AutoJoin->new(Channels => \@channels));
+ $irc->plugin_add('Connector', POE::Component::IRC::Plugin::Connector->new());
+ $irc->plugin_add('Hailo', POE::Component::IRC::Plugin::Hailo->new(
+     Own_channel    => '#bot_chan',
+     Ignore_regexes => [ qr{\w+://\w} ], # ignore lines containing URLs
+     Hailo_args     => {
+         brain_resource => 'brain.sqlite',
+     },
+ ));
+ 
+ $irc->yield('connect');
+ $poe_kernel->run();
+
+=head1 DESCRIPTION
+
+POE::Component::IRC::Plugin::Hailo is a
+L<POE::Component::IRC|POE::Component::IRC> plugin. It provides "intelligence"
+through the use of L<POE::Component::Hailo|POE::Component::Hailo>.
+It will talk back when addressed by channel members (and possibly in other
+situations, see L<C<new>|/"new">). An example:
+
+ --> hailo_bot joins #channel
+ <Someone> oh hi there
+ <Other> hello there
+ <Someone> hailo_bot: hi
+ <hailo_bot> oh hi there
+
+All NOTICEs are ignored, so if your other bots only issue NOTICEs like
+they should, they will be ignored automatically.
+
+Before using, you should read the documentation for L<Hailo|Hailo>, so you
+have an idea of what to pass as the B<'Hailo_args'> parameter to
+L<C<new>|/new>.
+
+This plugin requires the IRC component to be
+L<POE::Component::IRC::State|POE::Component::IRC::State> or a subclass thereof.
+
+=head1 METHODS
+
+=head2 C<new>
+
+Takes the following optional arguments:
+
+B<'Hailo'>, a reference to an existing
+L<POE::Component::Hailo|POE::Component::Hailo> object you have
+lying around. Useful if you want to use it with multiple IRC components.
+If this argument is not provided, the plugin will construct its own object.
+
+B<'Hailo_args'>, a hash reference containing arguments to pass to the
+constructor of a new L<Hailo|Hailo> object.
+
+B<'Channels'>, an array reference of channel names. If this is provided, the
+bot will only listen/respond the specified channels, rather than all
+channels (can be overridden with B<'Own_channel'>).
+
+B<'Own_channel'>, a channel where it will reply to all messages. The plugin
+will take care of joining the channel. It will part from it when the plugin
+is removed from the pipeline. Defaults to none.
+
+B<'Abuse_interval'>, default is 60 (seconds), which means that user X in
+channel Y has to wait that long before addressing the bot in the same channel
+if he wants to get a reply. Setting this to 0 effectively turns off abuse
+protection.
+
+B<'Talkative'>, when set to a true value, the bot will respond whenever
+someone mentions its name (in a PRIVMSG or CTCP ACTION (/me)). If false, it
+will only respond when addressed directly with a PRIVMSG. Default is false.
+
+B<'Ignore_masks'>, an array reference of IRC masks (e.g. "purl!*@*") to
+ignore.
+
+B<'Ignore_regexes'>, an array reference of regex objects. If a message
+matches any of them, it will be ignored. Handy for ignoring messages with
+URLs in them.
+
+B<'Method'>, how you want messages to be delivered. Valid options are
+'notice' (the default) and 'privmsg'.
+
+Returns a plugin object suitable for feeding to
+L<POE::Component::IRC|POE::Component::IRC>'s C<plugin_add> method.
+
+=head2 C<brain>
+
+Takes no arguments. Returns the underlying
+L<POE::Component::Hailo|POE::Component::Hailo> object being used
+by the plugin.
+
+=head2 C<transplant>
+
+Replaces the brain with the supplied
+L<POE::Component::Hailo|POE::Component::Hailo> instance. Shuts
+down the old brain if it was instantiated by the plugin itself.
+
+=head1 AUTHOR
+
+Hinrik E<Ouml>rn SigurE<eth>sson, hinrik.sig@gmail.com
+
+This distribution is based on
+L<POE::Component::IRC::Plugin::MegaHAL|POE::Component::IRC::Plugin::MegaHAL>
+by the same author.
+
+=cut
