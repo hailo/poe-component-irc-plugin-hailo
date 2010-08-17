@@ -1,3 +1,6 @@
+{{$NEXT}}
+    - Use Dist::Zilla
+
 0.11
     - Support a 'Channels' parameter to limit the bot's attention
 
