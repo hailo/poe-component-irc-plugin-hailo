@@ -89,13 +89,14 @@ sub hailo_learn_replied {
 sub _ignoring_channel {
     my ($self, $chan) = @_;
 
+    return if $self->{Own_channel} && $self->_is_own_channel($chan);
+
     if ($self->{Channels}) {
-        unless ($self->{Own_channel} && $self->_is_own_channel($chan)) {
-            return if !first {
-                $chan = irc_to_utf8($chan) if is_utf8($_);
-                $_ == $chan
-            } @{ $self->{Channels} };
-        }
+        return 1 if !first {
+            my $c = $chan;
+            $c = irc_to_utf8($c) if is_utf8($_);
+            $_ eq $c
+        } @{ $self->{Channels} };
     }
     return;
 }
@@ -313,8 +314,8 @@ B<'Hailo_args'>, a hash reference containing arguments to pass to the
 constructor of a new L<Hailo|Hailo> object.
 
 B<'Channels'>, an array reference of channel names. If this is provided, the
-bot will only listen/respond the specified channels, rather than all
-channels (can be overridden with B<'Own_channel'>).
+bot will only listen/respond in the specified channels, rather than all
+channels.
 
 B<'Own_channel'>, a channel where it will reply to all messages. The plugin
 will take care of joining the channel. It will part from it when the plugin

@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Make the 'Channels' parameter actually do what it's supposed to
 
 0.11  Tue Aug 17 22:54:06 GMT 2010
     - Use Dist::Zilla
