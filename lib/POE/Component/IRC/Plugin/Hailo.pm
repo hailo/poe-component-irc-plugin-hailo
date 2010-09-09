@@ -245,25 +245,15 @@ POE::Component::IRC::Plugin::Hailo - A PoCo-IRC plugin which provides access to 
 
 =head1 SYNOPSIS
 
- #!/usr/bin/env perl
- 
- use strict;
- use warnings;
- use POE;
- use POE::Component::IRC::Plugin::AutoJoin;
- use POE::Component::IRC::Plugin::Connector;
+To quickly get an IRC bot with this plugin up and running, you can use
+L<App::Pocoirc|App::Pocoirc>:
+
+ $ pocoirc -s irc.perl.org -j '#bots' -p 'Hailo{ "brain_resource": "brain.sqlite" }'
+
+Or use it in your code:
+
  use POE::Component::IRC::Plugin::Hailo;
- use POE::Component::IRC::State;
- 
- my $irc = POE::Component::IRC::State->spawn(
-     nick   => 'Brainy',
-     server => 'irc.freenode.net',
- );
- 
- my @channels = ('#public_chan', '#bot_chan');
- 
- $irc->plugin_add('AutoJoin', POE::Component::IRC::Plugin::AutoJoin->new(Channels => \@channels));
- $irc->plugin_add('Connector', POE::Component::IRC::Plugin::Connector->new());
+
  $irc->plugin_add('Hailo', POE::Component::IRC::Plugin::Hailo->new(
      Own_channel    => '#bot_chan',
      Ignore_regexes => [ qr{\w+://\w} ], # ignore lines containing URLs
@@ -271,9 +261,6 @@ POE::Component::IRC::Plugin::Hailo - A PoCo-IRC plugin which provides access to 
          brain_resource => 'brain.sqlite',
      },
  ));
- 
- $irc->yield('connect');
- $poe_kernel->run();
 
 =head1 DESCRIPTION
 
