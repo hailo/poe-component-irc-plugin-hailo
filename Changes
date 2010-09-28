@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.14  Tue Sep 28 08:52:11 GMT 2010
     - Update SYNOPSIS to reflect App-Pocoirc changes
     - Fix $outdated VERSION in bin/hailo
 
