@@ -2,7 +2,7 @@
 
 0.14  Tue Sep 28 08:52:11 GMT 2010
     - Update SYNOPSIS to reflect App-Pocoirc changes
-    - Fix $outdated VERSION in bin/hailo
+    - Fix $outdated VERSION in bin/irchailo-seed
 
 0.13  Thu Sep 9 06:34:00 GMT 2010
     - Mention App::Pocoirc in the SYNOPSIS
