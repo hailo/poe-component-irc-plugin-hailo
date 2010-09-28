@@ -1,5 +1,6 @@
 {{$NEXT}}
     - Update SYNOPSIS to reflect App-Pocoirc changes
+    - Fix $outdated VERSION in bin/hailo
 
 0.13  Thu Sep 9 06:34:00 GMT 2010
     - Mention App::Pocoirc in the SYNOPSIS
