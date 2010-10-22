@@ -241,7 +241,7 @@ sub S_public {
 
 =head1 NAME
 
-POE::Component::IRC::Plugin::Hailo - A PoCo-IRC plugin which provides access to a L<Hailo|Hailo> conversation simulator.
+POE::Component::IRC::Plugin::Hailo - A PoCo-IRC plugin which provides access to a Hailo conversation simulator.
 
 =head1 SYNOPSIS
 
