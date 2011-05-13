@@ -4,10 +4,10 @@ use strict;
 use warnings FATAL => 'all';
 use Carp;
 use Encode qw(encode_utf8 is_utf8);
+use IRC::Utils qw(lc_irc matches_mask_array decode_irc strip_color strip_formatting);
 use List::Util qw(first);
 use POE;
 use POE::Component::Hailo;
-use POE::Component::IRC::Common qw(l_irc matches_mask_array irc_to_utf8 strip_color strip_formatting);
 use POE::Component::IRC::Plugin qw(PCI_EAT_NONE);
 
 sub new {
@@ -80,7 +80,7 @@ sub hailo_learn_replied {
     my ($self, $args, $context) = @_[OBJECT, ARG0, ARG1];
     my $reply = shift @$args;
     $reply = "I don't know enough to answer you yet." if !defined $reply;
-    
+
     my $bytes = encode_utf8($reply);
     $self->{irc}->yield($self->{Method} => $context->{_target}, $bytes);
     return;
@@ -94,7 +94,7 @@ sub _ignoring_channel {
     if ($self->{Channels}) {
         return 1 if !first {
             my $c = $chan;
-            $c = irc_to_utf8($c) if is_utf8($_);
+            $c = decode_irc($c) if is_utf8($_);
             $_ eq $c
         } @{ $self->{Channels} };
     }
@@ -103,7 +103,7 @@ sub _ignoring_channel {
 
 sub _ignoring_user {
     my ($self, $user) = @_;
-    
+
     if ($self->{Ignore_masks}) {
         my $mapping = $self->{irc}->isupport('CASEMAPPING');
         return 1 if keys %{ matches_mask_array($self->{Ignore_masks}, [$user], $mapping) };
@@ -162,10 +162,10 @@ sub _msg_handler {
 
 sub _is_own_channel {
     my $self = shift;
-    my $chan = l_irc(shift);
-    my $own  = l_irc($self->{Own_channel});
+    my $chan = lc_irc(shift);
+    my $own  = lc_irc($self->{Own_channel});
 
-    $chan = irc_to_utf8($chan) if is_utf8($own);
+    $chan = decode_irc($chan) if is_utf8($own);
     return 1 if $chan eq $own;
     return;
 }
@@ -173,7 +173,7 @@ sub _is_own_channel {
 sub _normalize_irc {
     my ($line) = @_;
 
-    $line = irc_to_utf8($line);
+    $line = decode_irc($line);
     $line = strip_color($line);
     $line = strip_formatting($line);
     return $line;
@@ -186,7 +186,7 @@ sub brain {
 
 sub transplant {
     my ($self, $brain) = @_;
-    
+
     if (ref $brain ne 'POE::Component::Hailo') {
         croak 'Argument must be a POE::Component::Hailo instance';
     }
@@ -212,16 +212,16 @@ sub S_ctcp_action {
     my $what         = ${ $_[2] };
 
     return PCI_EAT_NONE if $chan !~ /^[#&!]/;
-    
+
     $poe_kernel->post(
         $self->{session_id},
         '_msg_handler',
         'action',
-        $user, 
+        $user,
         $chan,
         "$nick $what",
-    ); 
-    
+    );
+
     return PCI_EAT_NONE;
 }
 
