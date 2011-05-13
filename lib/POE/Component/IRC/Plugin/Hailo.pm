@@ -82,7 +82,12 @@ sub hailo_learn_replied {
     $reply = "I don't know enough to answer you yet." if !defined $reply;
 
     my $bytes = encode_utf8($reply);
-    $self->{irc}->yield($self->{Method} => $context->{_target}, $bytes);
+    if ($bytes =~ s/^\x01 //) {
+        $self->{irc}->yield('ctcp', $context->{_target}, "ACTION $bytes");
+    }
+    else {
+        $self->{irc}->yield($self->{Method}, $context->{_target}, $bytes);
+    }
     return;
 }
 
@@ -154,7 +159,7 @@ sub _msg_handler {
         $self->{Hailo}->session_id(),
         $event,
         [$what],
-        {_target => $chan },
+        { _target => $chan },
     );
 
     return;
@@ -207,7 +212,6 @@ sub S_isupport {
 sub S_ctcp_action {
     my ($self, $irc) = splice @_, 0, 2;
     my $user         = ${ $_[0] };
-    my $nick         = (split /!/, $user)[0];
     my $chan         = ${ $_[1] }->[0];
     my $what         = ${ $_[2] };
     my $chantypes    = join('', @{ $irc->isupport('CHANTYPES') || ['#', '&']});
@@ -220,7 +224,7 @@ sub S_ctcp_action {
         'action',
         $user,
         $chan,
-        "$nick $what",
+        "\x01 $what",
     );
 
     return PCI_EAT_NONE;
@@ -276,6 +280,9 @@ situations, see L<C<new>|/"new">). An example:
  <Other> hello there
  <Someone> hailo_bot: hi
  <hailo_bot> oh hi there
+
+It will occasionally send CTCP ACTIONS (/me) too, if the reply in question
+happens to be based on an earlier CTCP ACTION from someone.
 
 All NOTICEs are ignored, so if your other bots only issue NOTICEs like
 they should, they will be ignored automatically.
