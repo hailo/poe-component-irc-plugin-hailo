@@ -12,9 +12,10 @@ GetOptions(
     'r|ignore-regex=s' => \my @ignore_regexes,
     'n|ignore-nick=s'  => \my @ignore_nicks,
     'v|version'        => sub {
+        require POE::Component::IRC::Plugin::Hailo;
         no strict 'vars';
-        my $version = defined $App::Pocoirc::VERSION
-            ? $App::Pocoirc::VERSION
+        my $version = defined $POE::Component::IRC::Plugin::Hailo::VERSION
+            ? $POE::Component::IRC::Plugin::Hailo::VERSION
             : 'dev-git';
         print "irchailo-seed version $version\n";
         exit;

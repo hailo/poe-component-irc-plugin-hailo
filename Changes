@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Fix --version, it was always returning "dev-git"
 
 0.15  Fri May 13 18:27:55 GMT 2011
     - Allow the bot to respond with a CTCP ACTION (/me)
