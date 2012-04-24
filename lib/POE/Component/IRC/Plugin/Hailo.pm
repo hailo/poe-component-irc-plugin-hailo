@@ -346,9 +346,9 @@ URLs in them.
 B<'Method'>, how you want messages to be delivered. Valid options are
 'notice' (the default) and 'privmsg'.
 
-B<'Replyrate'>, when set to a number, controls how often the bot will respond
-to any message. Uses a uniform RNG and fires whenever the random roll is less
-than this number.
+B<'Replyrate'>, when set to a number (a percentage, C<0> to C<100>)
+controls how often the bot will respond to any message. Uses a uniform RNG
+and fires whenever the random roll is less than this number.
 
 Returns a plugin object suitable for feeding to
 L<POE::Component::IRC|POE::Component::IRC>'s C<plugin_add> method.
